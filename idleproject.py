@@ -159,16 +159,16 @@ while running:
     elif keys[3]:
         playerpos[0]+=5
         
-    if pygame.time.get_ticks()>=90000:
-            running=0
-            exitcode=1
-        if healthvalue<=0:
-            running=0
-            exitcode=0
-        if acc[1]!=0:
-            accuracy=acc[0]*1.0/acc[1]*100
-        else:
-            accuracy=0
+    #if pygame.time.get_ticks()>=90000:
+#            running=0
+#            exitcode=1
+#        if healthvalue<=0:
+#            running=0
+#            exitcode=0
+#        if acc[1]!=0:
+#            accuracy=acc[0]*1.0/acc[1]*100
+#        else:
+#            accuracy=0
         
 # 11 - Win/lose display        
 if exitcode==0:
