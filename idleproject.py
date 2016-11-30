@@ -3,6 +3,14 @@ from pygame.locals import *
 import math
 import random
 
+class Badguy(pygame.sprite.Sprite):
+    def __init__(self, image, position, minSpeed):
+        self.minSpeed = minSpeed
+        pygame.sprite.Sprite.__init__(self)
+        self.src_image = pygame.image.load(image)
+        self.position = position
+    def update(self):
+        self.position[0] -= random.randint(self.minSpeed, 32)
 
 # 2 - Initialize the game
 pygame.init()
@@ -14,9 +22,10 @@ acc=[0,0]
 arrows=[]
 badtimer=100
 badtimer1=0
-badguys=[[640,100]]
+minspeed = 0 
 healthvalue=194
 pygame.mixer.init()
+
 
 # 3 - Load images
 player = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/newman.bmp")
@@ -27,18 +36,23 @@ badguyimg1 = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/
 badguyimg=badguyimg1
 healthbar = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/smiley.bmp")
 health = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/smiley.bmp")
-gameover = pygame.image.load("resources/images/smiley.bmp")
-youwin = pygame.image.load("resources/images/smiley.bmp")
+gameover = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/smiley.bmp")
+youwin = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/smiley.bmp")
 
-hit = pygame.mixer.Sound("resources/audio/explode.wav")
-enemy = pygame.mixer.Sound("resources/audio/enemy.wav")
-shoot = pygame.mixer.Sound("resources/audio/shoot.wav")
+firstBadGuy = Badguy("/Users/jessicastuart/Desktop/206project4/images/astroid.bmp", [640, 100], minspeed)
+badguys=[firstBadGuy]
+
+
+hit = pygame.mixer.Sound("/Users/jessicastuart/Desktop/206project4/sounds/explosion.wav")
+enemy = pygame.mixer.Sound("/Users/jessicastuart/Desktop/206project4/sounds/explosion.wav")
+shoot = pygame.mixer.Sound("/Users/jessicastuart/Desktop/206project4/sounds/explosion.wav")
 hit.set_volume(0.05)
 enemy.set_volume(0.05)
 shoot.set_volume(0.05)
-pygame.mixer.music.load('resources/audio/moonlight.wav')
+pygame.mixer.music.load('/Users/jessicastuart/Desktop/206project4/sounds/explosion.wav')
 pygame.mixer.music.play(-1, 0.0)
 pygame.mixer.music.set_volume(0.25)
+
 
 
 # 4 - keep looping through
@@ -63,6 +77,20 @@ while running:
     playerrot = pygame.transform.rotate(player, 360-angle*57.29)
     playerpos1 = (playerpos[0]-playerrot.get_rect().width/2, playerpos[1]-playerrot.get_rect().height/2)
     screen.blit(playerrot, playerpos1)
+
+    xMin = playerpos1[0]
+    xMax = playerpos1[0] + 100
+    yMin = playerpos1[1] - 62
+    yMax = playerpos1[1]
+    for badguy in badguys:
+        if badguy.position[0] >= xMin and badguy.position[0] <= xMax:
+            if badguy.position[1] >= yMin and badguy.position[1] <= yMax:
+                healthvalue -= 1 
+                
+        
+
+
+    
     for bullet in arrows:
         index=0
         velx=math.cos(bullet[0])*10
@@ -76,20 +104,27 @@ while running:
             arrow1 = pygame.transform.rotate(arrow, 360-projectile[0]*57.29)
             screen.blit(arrow1, (projectile[1], projectile[2]))
     if badtimer==0:
-        badguys.append([640, random.randint(50,430)])
+        newBadGuy = Badguy("/Users/jessicastuart/Desktop/206project4/images/astroid.bmp"\
+                           ,[640, random.randint(50,430)], minspeed)
+        badguys.append(newBadGuy)
         badtimer=100-(badtimer1*2)
-        if badtimer1>=35:
-            badtimer1=35
+        if badtimer1>=42:
+            badtimer1=42
         else:
-            badtimer1+=5
+            badtimer1+=7
+
+        if minspeed >= 32:
+            minspeeed = 32
+        else:
+            minspeed += 2
     index=0
     for badguy in badguys:
-        if badguy[0]<-64:
+        if badguy.position[0]<-64:
             badguys.pop(index)
-        badguy[0]-=7
+        badguy.update()
         badrect=pygame.Rect(badguyimg.get_rect())
-        badrect.top=badguy[1]
-        badrect.left=badguy[0]
+        badrect.top=badguy.position[1]
+        badrect.left=badguy.position[0]
         if badrect.left<64:
             healthvalue -= random.randint(5,20)
             badguys.pop(index)
@@ -106,7 +141,7 @@ while running:
  
         index+=1
     for badguy in badguys:
-        screen.blit(badguyimg, badguy)
+        screen.blit(badguyimg, badguy.position)
 
     font = pygame.font.Font(None, 24)
     survivedtext = font.render(str((90000-pygame.time.get_ticks())/60000)+":"+str((90000-pygame.time.get_ticks())/1000%60).zfill(2), True, (0,0,0))
@@ -159,16 +194,16 @@ while running:
     elif keys[3]:
         playerpos[0]+=5
         
-    #if pygame.time.get_ticks()>=90000:
-#            running=0
-#            exitcode=1
-#        if healthvalue<=0:
-#            running=0
-#            exitcode=0
-#        if acc[1]!=0:
-#            accuracy=acc[0]*1.0/acc[1]*100
-#        else:
-#            accuracy=0
+    if pygame.time.get_ticks()>=90000:
+        running=0
+        exitcode=1
+        if healthvalue<=0:
+            running=0
+            exitcode=0
+        if acc[1]!=0:
+            accuracy=acc[0]*1.0/acc[1]*100
+        else:
+            accuracy=0
         
 # 11 - Win/lose display        
 if exitcode==0:
