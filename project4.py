@@ -20,7 +20,7 @@ class Badguy(Man):
 pygame.init()
 width, height = 640, 480
 screen=pygame.display.set_mode((width, height))
-skeys = [False, False, False, False]
+keys = [False, False, False, False]
 playerpos=[100,100]
 acc=[0,0]
 arrows=[]
