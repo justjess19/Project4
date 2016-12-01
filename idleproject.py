@@ -1,4 +1,4 @@
-#project 4 by Jessica Stuart 
+# project 4 by Jessica Stuart 
 
 import pygame
 from pygame.locals import *
@@ -33,8 +33,8 @@ count = 0
 
 
 player = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/newman.bmp")
-grass = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/newhorizon.bmp")
-castle = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/planet.bmp")
+horizon = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/newhorizon.bmp")
+planet = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/planet.bmp")
 arrow = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/rocket.bmp")
 badguyimg1 = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/newastroid.bmp")
 badguyimg=badguyimg1
@@ -58,19 +58,19 @@ pygame.mixer.music.play(-1, 0.0)
 pygame.mixer.music.set_volume(0.20)
 
 
-running = 1
+run = 1
 exitcode = 0
-while running:
+while run:
     badtimer-=1
     screen.fill(0)
-    for x in range(int(width/grass.get_width()+1)):
-        for y in range(int(height/grass.get_height()+1)):
-            screen.blit(grass,(x*100,y*100))
+    for x in range(int(width/horizon.get_width()+1)):
+        for y in range(int(height/horizon.get_height()+1)):
+            screen.blit(horizon,(x*100,y*100))
         
-    screen.blit(castle,(0,30))
-    screen.blit(castle,(0,135))
-    screen.blit(castle,(0,240))
-    screen.blit(castle,(0,345 ))
+    screen.blit(planet,(0,30))
+    screen.blit(planet,(0,135))
+    screen.blit(planet,(0,240))
+    screen.blit(planet,(0,345 ))
     position = pygame.mouse.get_pos()
     angle = math.atan2(position[1]-(playerpos[1]+32),position[0]-(playerpos[0]+26))
     playerrot = pygame.transform.rotate(player, 360-angle*57.29)
@@ -196,10 +196,10 @@ while running:
         playerpos[0]+=5
         
     if pygame.time.get_ticks()>=90000:
-        running=0
+        run=0
         exitcode=1
     if healthvalue<=0:
-        running=0
+        run=0
         exitcode=0
     if acc[1]!=0:
         accuracy=acc[0]*1.0/acc[1]*100
