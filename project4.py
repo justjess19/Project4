@@ -1,22 +1,26 @@
+#project 4 by Jessica Stuart 
+
 import pygame
 from pygame.locals import *
 import math
 import random
 
-class Badguy(pygame.sprite.Sprite):
+class Man(pygame.sprite.Sprite):
     def __init__(self, image, position, minSpeed):
         self.minSpeed = minSpeed
         pygame.sprite.Sprite.__init__(self)
         self.src_image = pygame.image.load(image)
         self.position = position
+
+class Badguy(Man):
     def update(self):
         self.position[0] -= random.randint(self.minSpeed, 32)
-
-# 2 - Initialize the game
+    
+    
 pygame.init()
 width, height = 640, 480
 screen=pygame.display.set_mode((width, height))
-keys = [False, False, False, False]
+skeys = [False, False, False, False]
 playerpos=[100,100]
 acc=[0,0]
 arrows=[]
@@ -27,7 +31,7 @@ healthvalue=194
 pygame.mixer.init()
 count = 0
 
-# 3 - Load images
+
 player = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/newman.bmp")
 grass = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/newhorizon.bmp")
 castle = pygame.image.load("/Users/jessicastuart/Desktop/206project4/images/planet.bmp")
@@ -54,19 +58,15 @@ pygame.mixer.music.play(-1, 0.0)
 pygame.mixer.music.set_volume(0.20)
 
 
-# 4 - keep looping through
 running = 1
 exitcode = 0
 while running:
     badtimer-=1
-    # 5 - clear the screen before drawing it again
     screen.fill(0)
-    # 6 - draw the screen elements
     for x in range(int(width/grass.get_width()+1)):
         for y in range(int(height/grass.get_height()+1)):
             screen.blit(grass,(x*100,y*100))
-     
-    # DRAW THINGS HERE    
+        
     screen.blit(castle,(0,30))
     screen.blit(castle,(0,135))
     screen.blit(castle,(0,240))
@@ -158,7 +158,6 @@ while running:
     pygame.display.flip()
 
 
-#HANDLE EVENTS HERE
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             pygame.quit()
@@ -187,8 +186,6 @@ while running:
             acc[1]+=1
             arrows.append([math.atan2(position[1]-(playerpos1[1]+32),position[0]-(playerpos1[0]+26)),playerpos1[0]+32,playerpos1[1]+32])
 
-
-    # UPDATE POSITION HERE
     if keys[0]:
         playerpos[1]-=5
     elif keys[2]:
@@ -208,9 +205,7 @@ while running:
         accuracy=acc[0]*1.0/acc[1]*100
     else:
         accuracy=0
-
- 
-# 11 - Win/lose display        
+       
 if exitcode==0:
     pygame.font.init()
     font = pygame.font.Font(None, 24)

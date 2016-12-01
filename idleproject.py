@@ -1,3 +1,5 @@
+#project 4 by Jessica Stuart 
+
 import pygame
 from pygame.locals import *
 import math
@@ -18,7 +20,7 @@ class Badguy(Man):
 pygame.init()
 width, height = 640, 480
 screen=pygame.display.set_mode((width, height))
-keys = [False, False, False, False]
+skeys = [False, False, False, False]
 playerpos=[100,100]
 acc=[0,0]
 arrows=[]
